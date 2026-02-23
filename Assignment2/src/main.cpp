@@ -39,14 +39,17 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle) {
 }
 
 Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float zNear, float zFar) {
-    Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
+    Eigen::Matrix4f squeeze = Eigen::Matrix4f::Identity();
 
-    projection(0, 0) = zNear;
-    projection(1, 1) = zNear;
-    projection(2, 2) = zNear + zFar;
-    projection(2, 3) = zNear * zFar * (-1);
-    projection(3, 2) = 1;
-    projection(3, 3) = 0;
+    zNear *= -1;
+    zFar *= -1;
+
+    squeeze(0, 0) = zNear;
+    squeeze(1, 1) = zNear;
+    squeeze(2, 2) = zNear + zFar;
+    squeeze(2, 3) = zNear * zFar * (-1);
+    squeeze(3, 2) = 1;
+    squeeze(3, 3) = 0;
 
     float top = tan(eye_fov / 2) * fabs(zNear);
     float bottom = -top;
@@ -60,7 +63,9 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
     scale(1, 1) = 2.0 / (top - bottom);
     scale(2, 2) = 2.0 / (zNear - zFar);
 
-    return scale * translation * projection;
+    Eigen::Matrix4f projection = scale * translation * squeeze;
+
+    return projection;
 }
 
 int main(int argc, const char** argv) {
