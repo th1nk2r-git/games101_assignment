@@ -1,0 +1,11 @@
+add_rules("mode.debug", "mode.release")
+add_requires("opencv")
+add_requires("eigen")
+
+target("Application")
+    set_kind("binary")
+    add_includedirs("include")
+    add_files("src/*.cpp")
+    set_languages("c++17")
+    add_packages("eigen")
+    add_packages("opencv")

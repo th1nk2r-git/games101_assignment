@@ -18,27 +18,36 @@ Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos) {
     return view;
 }
 
+// 作业1: 构造绕z轴旋转某个弧度的变换矩阵
 Eigen::Matrix4f get_model_matrix(float rotation_angle) {
     Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
 
-    model(0, 0) = cos(rotation_angle);
-    model(0, 1) = -sin(rotation_angle);
-    model(1, 0) = sin(rotation_angle);
-    model(1, 1) = cos(rotation_angle);
+    Eigen::Matrix4f rotation;
+    
+    float angle = rotation_angle / 180 * MY_PI;
+
+    rotation << cos(angle), -sin(angle), 0, 0,
+                sin(angle),  cos(angle), 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1;
+
+    model = rotation * model;
+
     return model;
 }
 
+// 作业1: 根据视锥体参数构造透视矩阵
 Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float zNear, float zFar) {
-    Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
+    Eigen::Matrix4f squeeze = Eigen::Matrix4f::Identity();
 
-    projection(0, 0) = zNear;
-    projection(1, 1) = zNear;
-    projection(2, 2) = zNear + zFar;
-    projection(2, 3) = zNear * zFar * (-1);
-    projection(3, 2) = 1;
-    projection(3, 3) = 0;
+    squeeze(0, 0) = zNear;
+    squeeze(1, 1) = zNear;
+    squeeze(2, 2) = zNear + zFar;
+    squeeze(2, 3) = zNear * zFar * (-1);
+    squeeze(3, 2) = 1;
+    squeeze(3, 3) = 0;
 
-    float top = -tan(eye_fov / 2) * fabs(zNear);
+    float top = tan(eye_fov / 2) * fabs(zNear);
     float bottom = -top;
     float right = top * aspect_ratio;
     float left = -right;
@@ -50,11 +59,34 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float z
     scale(1, 1) = 2.0 / (top - bottom);
     scale(2, 2) = 2.0 / (zNear - zFar);
 
-    return scale * translation * projection;
+    Eigen::Matrix4f projection = scale * translation * squeeze;
+
+    return projection;
+}
+
+// 提高项: 构造绕任意轴旋转的变换矩阵
+Eigen::Matrix4f get_rotation(Vector3f axis, float angle) {
+    float radian = angle / 180 * MY_PI;
+    Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
+    Eigen::Matrix3f I = Eigen::Matrix3f::Identity();
+    Eigen::Matrix3f M;
+    Eigen::Matrix3f Rk;
+    Rk << 0, -axis[2], axis[1],
+        axis[2], 0, -axis[0],
+        -axis[1], axis[0], 0;
+    
+    M = I + (1 - cos(radian)) * Rk * Rk + sin(radian) * Rk;
+
+    model << M(0, 0), M(0, 1), M(0, 2), 0,
+        M(1, 0), M(1, 1), M(1, 2), 0,
+        M(2, 0), M(2, 1), M(2, 2), 0,
+        0, 0, 0, 1;
+    return model;
 }
 
 int main(int argc, const char** argv) {
     float angle = 0;
+    Vector3f axis(0, 0, 1);
     bool command_line = false;
     std::string filename = "output.png";
 
@@ -107,7 +139,7 @@ int main(int argc, const char** argv) {
     while (key != 27) {
         r.clear(rst::Buffers::Color | rst::Buffers::Depth);
 
-        r.set_model(get_model_matrix(angle));
+        r.set_model(get_rotation(axis, angle));
         r.set_view(get_view_matrix(eye_pos));
         r.set_projection(get_projection_matrix(45, 1, 0.1, 50));
 

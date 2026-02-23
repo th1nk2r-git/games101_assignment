@@ -11,10 +11,10 @@
                 "_UNICODE"
             ],
             "compilerPath": "D:\\environment\\c++\\msvc\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+            "compileCommands": "${workspaceFolder}/.xmake/compile_commands.json",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
-            "intelliSenseMode": "windows-msvc-x64",
-            "compileCommands": ".vscode\\compile_commands.json"
+            "intelliSenseMode": "windows-msvc-x64"
         }
     ],
     "version": 4
