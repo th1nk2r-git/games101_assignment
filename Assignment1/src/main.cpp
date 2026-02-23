@@ -40,6 +40,9 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle) {
 Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio, float zNear, float zFar) {
     Eigen::Matrix4f squeeze = Eigen::Matrix4f::Identity();
 
+    zNear *= -1;
+    zFar *= -1;
+
     squeeze(0, 0) = zNear;
     squeeze(1, 1) = zNear;
     squeeze(2, 2) = zNear + zFar;
