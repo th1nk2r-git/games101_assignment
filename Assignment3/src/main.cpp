@@ -113,7 +113,7 @@ Eigen::Vector3f texture_fragment_shader(const fragment_shader_payload& payload)
     texture_color << return_color.x() / 255.0, return_color.y() / 255.0, return_color.z() / 255.0;
 
     auto ka = Eigen::Vector3f(0.005, 0.005, 0.005);
-    auto kd = payload.color;
+    auto kd = texture_color;
     auto ks = Eigen::Vector3f(0.7937, 0.7937, 0.7937);
 
     auto l1 = light{{20, 20, 20}, {500, 500, 500}};
