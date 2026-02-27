@@ -2,7 +2,7 @@ add_rules("mode.debug", "mode.release")
 add_requires("opencv")
 add_requires("eigen")
 
-target("Application")
+target("rasterizer")
     set_kind("binary")
     add_includedirs("include")
     add_files("src/*.cpp")
