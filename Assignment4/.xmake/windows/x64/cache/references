@@ -1,0 +1,9 @@
+{
+    packages = {
+        [[C:\Users\th1nk2r\AppData\Local\.xmake\packages\n\nasm\2.16.03\a21bbd6e91e3451bb2fbb65664f020c8]],
+        [[C:\Users\th1nk2r\AppData\Local\.xmake\packages\m\msys2-base\2025.08.30\d8b1d474896c4805816c879f13b6c45c]],
+        [[C:\Users\th1nk2r\AppData\Local\.xmake\packages\m\msys2\latest\bb9a2baa39ff47b5aae72868528d6ee7]],
+        [[C:\Users\th1nk2r\AppData\Local\.xmake\packages\f\ffmpeg\7.1\7d8be6d18f6e43a9ae317c4b4ce167a4]],
+        [[C:\Users\th1nk2r\AppData\Local\.xmake\packages\o\opencv\4.13.0\3ab58d7b361944dfbdcf0eda2fc6e138]]
+    }
+}
